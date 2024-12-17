@@ -47,9 +47,12 @@
               inherit (pkgs)
                 direnv
                 nix-direnv
+		coreutils
                 openocd
                 qemu
                 ;
+		inherit (pkgs.python311Packages)
+    		pyserial;
             };
             OPENCM3_DIR = ''${libopencm3}'';
             MBED_OS_DIR = ''${mbed-os}'';
