@@ -8,28 +8,27 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define STATE_SIZE 200
-#define REPEAT 100
-#define REPEAT_MEDIAN 100
+#define STATE_SIZE 2
+#define REPEAT 1
+#define REPEAT_MEDIAN 1
 
 
 /* Assembly Functions */
 /* Reference, bit interlaved */
-extern void fe25519_add_wrap(void*);
-extern void fe25519_sub_wrap(void*);
-extern void fe25519_mul_wrap(void*);
-extern void fe25519_sqr_wrap(void*);
-//extern void fe25519_sub_wrap(void*);
+extern void fe25519_add_wrap(uint32_t *out, uint32_t *a, uint32_t *b);
+extern void fe25519_sub_wrap(uint32_t *out, uint32_t *a, uint32_t *b);
+extern void fe25519_mul_wrap(uint32_t *out, uint32_t *a, uint32_t *b);
+extern void fe25519_sqr_wrap(uint32_t *out, uint32_t *a, uint32_t *b);
 /* To be tested, bit interlaved */
 // extern void KeccakF1600_StatePermute_old(void*);
 // /* M7 optimized code by Alexandre Adomnicai */
 // extern void KeccakP1600_Permute_24rounds(void*);
 
 /* Slothy */
-extern void fe25519_add_opt_m7(void*);
-extern void fe25519_sub_opt_m7(void*);
-extern void fe25519_mul_opt_m7(void*);
-extern void fe25519_sqr_opt_m7(void*);
+extern void fe25519_add_opt_m7(uint32_t *out, uint32_t *a, uint32_t *b);
+extern void fe25519_sub_opt_m7(uint32_t *out, uint32_t *a, uint32_t *b);
+extern void fe25519_mul_opt_m7(uint32_t *out, uint32_t *a, uint32_t *b);
+extern void fe25519_sqr_opt_m7(uint32_t *out, uint32_t *a, uint32_t *b);
 
 typedef struct {
     char name[100];
@@ -38,6 +37,9 @@ typedef struct {
 
 benchmark_result results[100];
 int benchmark_cnt = 0;
+uint32_t out[8] = {0};
+uint32_t a[8] = {1, 2, 3, 4, 5, 6, 7, 8}; 
+uint32_t b[8] = {8, 7, 6, 5, 4, 3, 2, 1}; 
 
 // static void add_benchmark_results(char *name, uint64_t cycles){
 //     if(benchmark_cnt == 100) return;
@@ -59,7 +61,7 @@ static int cmp_uint64_t(const void *a, const void *b)
     return (int)((*((const uint64_t *)a)) - (*((const uint64_t *)b)));
 }
 
-#define MAKE_BENCH_X25519(var, func)                                         \
+#define MAKE_BENCH_X25519(var, func,out,a,b)                                         \
     int bench_x25519_##var()                                                 \
     {                                                                         \
         debug_printf("X25519 Benchmark for " #func);                         \
@@ -71,13 +73,15 @@ static int cmp_uint64_t(const void *a, const void *b)
             state[i] = rand();                                                \
         }                                                                     \
                                                                               \
+        debug_printf("X25519 Benchmark for " #func);                         \
         /* Warm up */                                                         \
-        (func)(state);                                                        \
+        (func)(out,a,b);                                                        \
+        debug_printf("X25519 Benchmark for " #func);                         \
         for (size_t cnt_median = 0; cnt_median < REPEAT_MEDIAN; cnt_median++) \
         {                                                                     \
             t1 = hal_get_time();                                              \
             for (size_t cnt = 0; cnt < REPEAT; cnt++)                         \
-                (func)(state);                                                \
+                (func)(out,a,b);                                                \
             t2 = hal_get_time();                                              \
             cycles[cnt_median] = (t2 - t1) / REPEAT;                          \
         }                                                                     \
@@ -88,16 +92,16 @@ static int cmp_uint64_t(const void *a, const void *b)
         return (0);                                                           \
     }
 
-MAKE_BENCH_X25519(fe25519_add, fe25519_add_wrap)
-MAKE_BENCH_X25519(fe25519_sub, fe25519_sub_wrap)
-MAKE_BENCH_X25519(fe25519_mul, fe25519_mul_wrap)
-MAKE_BENCH_X25519(fe25519_sqr, fe25519_sqr_wrap)
+MAKE_BENCH_X25519(fe25519_add, fe25519_add_wrap,out,a,b)
+MAKE_BENCH_X25519(fe25519_sub, fe25519_sub_wrap,out,a,b)
+MAKE_BENCH_X25519(fe25519_mul, fe25519_mul_wrap,out,a,b)
+MAKE_BENCH_X25519(fe25519_sqr, fe25519_sqr_wrap,out,a,b)
 
 
-MAKE_BENCH_X25519(fe25519_add_opt_m7,fe25519_add_opt_m7)
-MAKE_BENCH_X25519(fe25519_sub_opt_m7,fe25519_sub_opt_m7)
-MAKE_BENCH_X25519(fe25519_mul_opt_m7,fe25519_mul_opt_m7)
-MAKE_BENCH_X25519(fe25519_sqr_opt_m7,fe25519_sqr_opt_m7)
+MAKE_BENCH_X25519(fe25519_add_opt_m7,fe25519_add_opt_m7,out,a,b)
+MAKE_BENCH_X25519(fe25519_sub_opt_m7,fe25519_sub_opt_m7,out,a,b)
+MAKE_BENCH_X25519(fe25519_mul_opt_m7,fe25519_mul_opt_m7,out,a,b)
+MAKE_BENCH_X25519(fe25519_sqr_opt_m7,fe25519_sqr_opt_m7,out,a,b)
 
 
 // MAKE_TEST_KECCAKF(pqm4, KeccakF1600_StatePermute_old, KeccakF1600_StatePermute_pqm4)
@@ -107,7 +111,8 @@ MAKE_BENCH_X25519(fe25519_sqr_opt_m7,fe25519_sqr_opt_m7)
 
 int main(void)
 {
-    //debug_test_start( "Keccak new" );
+    debug_test_start( "x25519 new" );
+
     /* Test correctness */
     // if(test_keccakf_pqm4() != 0){
     //     return 1;
