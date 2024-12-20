@@ -17,6 +17,9 @@
 /* Reference, bit interlaved */
 extern void fe25519_add_wrap(void*);
 extern void fe25519_sub_wrap(void*);
+extern void fe25519_mul_wrap(void*);
+extern void fe25519_sqr_wrap(void*);
+//extern void fe25519_sub_wrap(void*);
 /* To be tested, bit interlaved */
 // extern void KeccakF1600_StatePermute_old(void*);
 // /* M7 optimized code by Alexandre Adomnicai */
@@ -24,7 +27,9 @@ extern void fe25519_sub_wrap(void*);
 
 /* Slothy */
 extern void fe25519_add_opt_m7(void*);
-//extern void fe25519_sub_opt_m7(void*);
+extern void fe25519_sub_opt_m7(void*);
+extern void fe25519_mul_opt_m7(void*);
+extern void fe25519_sqr_opt_m7(void*);
 
 typedef struct {
     char name[100];
@@ -85,11 +90,16 @@ static int cmp_uint64_t(const void *a, const void *b)
 
 MAKE_BENCH_X25519(fe25519_add, fe25519_add_wrap)
 MAKE_BENCH_X25519(fe25519_sub, fe25519_sub_wrap)
-// MAKE_BENCH_X25519(mul, x25519_add_opt_m7)
-// MAKE_BENCH_X25519(sqr, x25519_add_opt_m7)
+MAKE_BENCH_X25519(fe25519_mul, fe25519_mul_wrap)
+MAKE_BENCH_X25519(fe25519_sqr, fe25519_sqr_wrap)
+
 
 MAKE_BENCH_X25519(fe25519_add_opt_m7,fe25519_add_opt_m7)
-//MAKE_BENCH_X25519(fe25519_sub_opt_m7,fe25519_sub_opt_m7)
+MAKE_BENCH_X25519(fe25519_sub_opt_m7,fe25519_sub_opt_m7)
+MAKE_BENCH_X25519(fe25519_mul_opt_m7,fe25519_mul_opt_m7)
+MAKE_BENCH_X25519(fe25519_sqr_opt_m7,fe25519_sqr_opt_m7)
+
+
 // MAKE_TEST_KECCAKF(pqm4, KeccakF1600_StatePermute_old, KeccakF1600_StatePermute_pqm4)
 // MAKE_TEST_KECCAKF(m7, KeccakP1600_Permute_24rounds, KeccakF1600_StatePermute_pqm4)
 
@@ -114,9 +124,14 @@ int main(void)
     /* Bench */
     bench_x25519_fe25519_add();
     bench_x25519_fe25519_sub();
+    bench_x25519_fe25519_mul();
+    bench_x25519_fe25519_sqr();
+
     
     bench_x25519_fe25519_add_opt_m7();
-    //bench_x25519_fe25519_sub_opt_m7();
+    bench_x25519_fe25519_sub_opt_m7();
+    bench_x25519_fe25519_mul_opt_m7();
+    bench_x25519_fe25519_sqr_opt_m7();
 
     debug_printf("======================" );
     //dump_benchmarks_tex();
