@@ -19,15 +19,15 @@
 extern void fe25519_add_wrap(uint32_t *out, uint32_t *a, uint32_t *b);
 extern void fe25519_sub_wrap(uint32_t *out, uint32_t *a, uint32_t *b);
 extern void fe25519_mul_wrap(uint32_t *out, uint32_t *a, uint32_t *b);
-//extern void fe25519_sqr_wrap(uint32_t *out, uint32_t *a, uint32_t *b);
+extern void fe25519_sqr_wrap(uint32_t *out, uint32_t *a, uint32_t *b);
 /* To be tested, bit interlaved */
 // extern void KeccakF1600_StatePermute_old(void*);
 // /* M7 optimized code by Alexandre Adomnicai */
 // extern void KeccakP1600_Permute_24rounds(void*);
 
 /* Slothy */
-extern void fe25519_add_opt_m7(uint32_t *out, uint32_t *a, uint32_t *b);
-extern void fe25519_sub_opt_m7(uint32_t *out, uint32_t *a, uint32_t *b);
+//extern void fe25519_add_opt_m7(uint32_t *out, uint32_t *a, uint32_t *b);
+//extern void fe25519_sub_opt_m7(uint32_t *out, uint32_t *a, uint32_t *b);
 //extern void fe25519_mul_opt_m7(uint32_t *out, uint32_t *a, uint32_t *b);
 //extern void fe25519_sqr_opt_m7(uint32_t *out, uint32_t *a, uint32_t *b);
 
@@ -79,8 +79,7 @@ static int cmp_uint32_t(const void *p1, const void *p2)
             }                                                            \
             t2 = hal_get_time();                                         \
             cycles[cnt_median] = (t2 - t1) / REPEAT;                     \
-            debug_printf("t1 = %d, t2 = %d, delta = %d\n", t1, t2, t2 - t1); \
-            debug_printf("%d\n", cycles[cnt_median]);                  \
+                                                                         \
         }                                                                \
                                                                          \
         qsort(cycles, REPEAT_MEDIAN, sizeof(uint32_t), cmp_uint32_t);    \
@@ -94,11 +93,11 @@ static int cmp_uint32_t(const void *p1, const void *p2)
 
 MAKE_BENCH_X25519(fe25519_add, fe25519_add_wrap)
 MAKE_BENCH_X25519(fe25519_sub, fe25519_sub_wrap)
-//MAKE_BENCH_X25519(fe25519_mul, fe25519_mul_wrap)
-//MAKE_BENCH_X25519(fe25519_sqr, fe25519_sqr_wrap,out,a,b)
+MAKE_BENCH_X25519(fe25519_mul, fe25519_mul_wrap)
+MAKE_BENCH_X25519(fe25519_sqr, fe25519_sqr_wrap)
 
 
-MAKE_BENCH_X25519(fe25519_add_opt_m7,fe25519_add_opt_m7)
+//MAKE_BENCH_X25519(fe25519_add_opt_m7,fe25519_add_opt_m7)
 //MAKE_BENCH_X25519(fe25519_sub_opt_m7,fe25519_sub_opt_m7)
 //MAKE_BENCH_X25519(fe25519_mul_opt_m7,fe25519_mul_opt_m7,out,a,b)
 //MAKE_BENCH_X25519(fe25519_sqr_opt_m7,fe25519_sqr_opt_m7,out,a,b)
@@ -130,11 +129,11 @@ int main(void)
     /* Bench */
     bench_x25519_fe25519_add();
     bench_x25519_fe25519_sub();
-    //bench_x25519_fe25519_mul();
-    //bench_x25519_fe25519_sqr();
+    bench_x25519_fe25519_mul();
+    bench_x25519_fe25519_sqr();
 
     
-    bench_x25519_fe25519_add_opt_m7();
+    //bench_x25519_fe25519_add_opt_m7();
     //bench_x25519_fe25519_sub_opt_m7();
     //bench_x25519_fe25519_mul_opt_m7();
     //bench_x25519_fe25519_sqr_opt_m7();
