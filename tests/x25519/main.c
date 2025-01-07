@@ -159,6 +159,10 @@ MAKE_BENCH_X25519_single(fe25519_sqr_opt_m7,fe25519_sqr_opt_m7_wrap)
         debug_printf("25519 Correctness Test for " #func);            \
         uint32_t out_ref[X25519_SIZE] __attribute__((aligned(16))) = {0}; \
         uint32_t out_test[X25519_SIZE] __attribute__((aligned(16))) = {0}; \
+        for (size_t i = 0; i < X25519_SIZE; i++) {                    \
+            out_ref[i] = rand();                                      \
+        }                                                             \
+        memcpy(out_test, out_ref, sizeof(out_ref));                   \
         ref_func(out_ref);                                            \
         func(out_test);                                               \
                                                                       \
