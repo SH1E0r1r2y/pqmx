@@ -1,0 +1,1 @@
+../../../slothy/examples/opt/armv7m/fe25519_sub_sqr_m7.s
