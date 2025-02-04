@@ -18,3 +18,4 @@ X25519_ASMS += $(X25519_ASMDIR)/fe25519_add_opt_m7.s
 X25519_ASMS += $(X25519_ASMDIR)/fe25519_sub_opt_m7.s
 X25519_ASMS += $(X25519_ASMDIR)/fe25519_mul_opt_m7.s
 X25519_ASMS += $(X25519_ASMDIR)/fe25519_sqr_opt_m7.s
+# X25519_ASMS += $(X25519_ASMDIR)/curve25519_sclarmult.s
