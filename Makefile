@@ -31,7 +31,6 @@ include tests/toom/toom.mk
 include tests/transpose/transpose.mk
 include tests/unpack/unpack.mk
 include tests/x25519/x25519.mk
-include tests/keccak/keccak.mk
 
 testname = $(shell echo $(1) | tr '[a-z]' '[A-Z]' | tr '-' '_' | tr '/' '_')
 testdir = $(addprefix $(2),tests/$(firstword $(subst /, ,$1))/)

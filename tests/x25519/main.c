@@ -113,9 +113,9 @@ MAKE_BENCH_X25519_single(fe25519_sqr, fe25519_sqr_wrap)
 
 
 MAKE_BENCH_X25519(fe25519_add_opt_m7,fe25519_add_opt_m7_wrap)
-// MAKE_BENCH_X25519(fe25519_sub_opt_m7,fe25519_sub_opt_m7_wrap)
-// MAKE_BENCH_X25519(fe25519_mul_opt_m7,fe25519_mul_opt_m7_wrap)
-// MAKE_BENCH_X25519_single(fe25519_sqr_opt_m7,fe25519_sqr_opt_m7_wrap)
+MAKE_BENCH_X25519(fe25519_sub_opt_m7,fe25519_sub_opt_m7_wrap)
+MAKE_BENCH_X25519(fe25519_mul_opt_m7,fe25519_mul_opt_m7_wrap)
+MAKE_BENCH_X25519_single(fe25519_sqr_opt_m7,fe25519_sqr_opt_m7_wrap)
 
 #define MAKE_TEST_X25519(var, func, ref_func)                         \
     int test_x25519_##var()                                           \
@@ -217,13 +217,13 @@ int main(void)
     bench_x25519_fe25519_add();
     bench_x25519_fe25519_sub();
     bench_x25519_fe25519_mul();
-    bench_x25519_fe25519_sqr();
+    //bench_x25519_fe25519_sqr();
 
     
-    // bench_x25519_fe25519_add_opt_m7();
-    // bench_x25519_fe25519_sub_opt_m7();
-    // bench_x25519_fe25519_mul_opt_m7();
-    // bench_x25519_fe25519_sqr_opt_m7();
+    bench_x25519_fe25519_add_opt_m7();
+    bench_x25519_fe25519_sub_opt_m7();
+    //bench_x25519_fe25519_mul_opt_m7();
+    //bench_x25519_fe25519_sqr_opt_m7();
 
     debug_printf("======================\n");
     debug_printf("ALL GOOD!\n");
