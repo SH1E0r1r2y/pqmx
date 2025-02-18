@@ -10,6 +10,12 @@ def hex_to_uint32_array(hex_str):
 
     return ", ".join(result)
 
-alice_public = "41b6ec3c50ee7af203c0026e5e079e7fa8cbc9bc581d49cb0d537d5778497c87"
-uint32_format = hex_to_uint32_array(alice_public)
-print(f"uint32_t publickey[X25519_SIZE] = {{ {uint32_format} }};")
+scalar = "a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4"
+uint32_format = hex_to_uint32_array(scalar)
+print(f"uint32_t private[X25519_SIZE] = {{ {uint32_format} }};")
+u_cor = "e6db6867583030db3594c1a424b15f7c726624ec26b3353b10a903a6d0ab1c4c"
+uint32_format = hex_to_uint32_array(u_cor)
+print(f"uint32_t public[X25519_SIZE] = {{ {uint32_format} }};")
+outputexcept = "c3da55379de9c6908e94ea4df28d084f32eccf03491c71f754b4075577a28552"
+uint32_format = hex_to_uint32_array(outputexcept)
+print(f"uint32_t public[X25519_SIZE] = {{ {uint32_format} }};")
