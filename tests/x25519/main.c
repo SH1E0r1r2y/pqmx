@@ -276,10 +276,11 @@ MAKE_TEST_X25519_single(fe25519_sqr, fe25519_sqr_wrap, fe25519_sqr_opt_m7_wrap)
         (func)(bob_public, bob_secret, basepoint);                            \
         (func)(alice_shared, alice_secret, bob_public);                       \
         (func)(bob_shared, bob_secret, alice_public);                         \
-        for (int i = 0; i < X25519_SIZE; i++) {                               \
-            debug_printf("Alice Shared[%d]: 0x%08x\n", i, alice_shared[i]);         \
-            debug_printf("Bob Shared[%d]: 0x%08x\n", i, bob_shared[i]);              \
-        }                               \
+        for (int i = 0; i < X25519_SIZE; i++) {                              \
+            debug_printf("Alice Shared[%d]: 0x%08lx    Bob Shared[%d]: 0x%08lx\n", \
+                   i, (unsigned long)alice_shared[i],                        \
+                   i, (unsigned long)bob_shared[i]);                         \
+        }                                                                    \
         if (memcmp(alice_shared, bob_shared, sizeof(alice_shared)) == 0) {                               \
             debug_printf("\u2705 Alice & Bob Shared Keys Match!\n");                               \
             return 0;                               \
