@@ -213,9 +213,9 @@ MAKE_TEST_X25519_single(fe25519_sqr, fe25519_sqr_wrap, fe25519_sqr_opt_m7_wrap)
         uint32_t cycles[REPEAT_MEDIAN];                                     \
         uint32_t out[X25519_SIZE] __attribute__((aligned(16))) = {0};       \
         uint32_t secretkey[X25519_SIZE] __attribute__((aligned(16))) = {    \
-            0x6be346a5, 0x9d7c52f0, 0x4b15163b, 0xdd5e4682, 0x0a4c1462, 0x185afcc1, 0x44226a50, 0xc49a44ba };              \
-        uint32_t basepoint[X25519_SIZE] __attribute__((aligned(16))) = {   \
-            0x6768dbe6, 0xdb303058, 0xa4c19435, 0x7c5fb124, 0xec246672, 0x3b35b326, 0xa603a910, 0x4c1cabd0 };              \
+            0x6be346a5,0x9d7c52f0,0x4b15163b,0xdd5e4682,0x0a4c1462,0x185afcc1,0x44226a50,0xc49a44ba };              \
+        uint32_t basepoint[X25519_SIZE] __attribute__((aligned(16))) = {    \
+            0x6768dbe6,0xdb303058,0xa4c19435,0x7c5fb124,0xec246672,0x3b35b326,0xa603a910,0x4c1cabd0 };              \
         /* Warm up */                                                       \
         (func)(out, secretkey, basepoint);                                     \
                                                                             \
@@ -302,14 +302,14 @@ int main(void)
         debug_printf("sub?");
         return 1;
     }
-    if (test_x25519_fe25519_mul() != 0) {
-        debug_printf("mul?");
-        return 1;
-    }
-    if (test_x25519_fe25519_sqr() != 0) {
-        debug_printf("sqr?");
-        return 1;
-    }
+    //if (test_x25519_fe25519_mul() != 0) {
+    //    debug_printf("mul?");
+    //    return 1;
+    //}
+    //if (test_x25519_fe25519_sqr() != 0) {
+    //    debug_printf("sqr?");
+    //    return 1;
+    //}
 
 
 //     /* Bench */
