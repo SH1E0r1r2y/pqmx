@@ -123,8 +123,9 @@ MAKE_BENCH_TESTNUMBER(fe25519_mul, fe25519_mul_wrap)
         add_benchmark_results(#var, (cycles[REPEAT_MEDIAN >> 1]));         \
         return 0;                                                          \
     }
+MAKE_BENCH_X25519(fe25519_add, fe25519_add_wrap)
 MAKE_BENCH_X25519(fe25519_sub, fe25519_sub_wrap)
-MAKE_BENCH_X25519(fe25519_mul_wrap, fe25519_mul_wrap)
+MAKE_BENCH_X25519(fe25519_mul, fe25519_mul_wrap)
 MAKE_BENCH_X25519_single(fe25519_sqr, fe25519_sqr_wrap)
 MAKE_BENCH_X25519(curve25519_scalarmult,curve25519_scalarmult)
 
@@ -216,6 +217,8 @@ MAKE_TEST_X25519_single(fe25519_sqr, fe25519_sqr_wrap, fe25519_sqr_opt_m7_wrap)
             0x6be346a5,0x9d7c52f0,0x4b15163b,0xdd5e4682,0x0a4c1462,0x185afcc1,0x44226a50,0xc49a44ba };              \
         uint32_t basepoint[X25519_SIZE] __attribute__((aligned(16))) = {    \
             0x6768dbe6,0xdb303058,0xa4c19435,0x7c5fb124,0xec246672,0x3b35b326,0xa603a910,0x4c1cabd0 };              \
+        uint32_t exceptoutput[X25519_SIZE] __attribute__((aligned(16))) = {    \
+            0x3755dac3,0x90c6e99d,0x4dea948e,0x4f088df2,0x03cfec32,0xf7711c49,0x5507b454,0x5285a277  };              \
         /* Warm up */                                                       \
         (func)(out, secretkey, basepoint);                                     \
                                                                             \
@@ -233,18 +236,26 @@ MAKE_TEST_X25519_single(fe25519_sqr, fe25519_sqr_wrap, fe25519_sqr_opt_m7_wrap)
         debug_printf("%s repeat %d, %d cycles\n", #func,                   \
                      REPEAT * REPEAT_MEDIAN,                               \
                      cycles[REPEAT_MEDIAN / 2]);                           \
-        debug_printf("curve25519_scalarmult secretkey:\n");                 \
+        debug_printf("curve25519_scalarmult Secret Key(Got from IETF):\n");                 \
         for (size_t i = 0; i < X25519_SIZE; i++) {                          \
             debug_printf("0x%08x ", secretkey[i]);                          \
         }                                                                   \
-        debug_printf("curve25519_scalarmult basepoint:\n");                 \
+        debug_printf("curve25519_scalarmult Base Point(Got from IETF):\n");                 \
         for (size_t i = 0; i < X25519_SIZE; i++) {                          \
             debug_printf("0x%08x ", basepoint[i]);                          \
         }                                                                   \
         debug_printf("\n");                                                \
-        debug_printf("curve25519_scalarmult result:\n");                    \
+        debug_printf("curve25519_scalarmult Result:\n");                    \
         for (size_t i = 0; i < X25519_SIZE; i++) {                          \
             debug_printf("0x%08x ", out[i]);                                \
+        }                                                                   \
+        debug_printf("Comparison with the fixed test vector from IETF:");       \
+        if (memcmp(out, exceptoutput, sizeof(exceptoutput)) == 0) {         \
+            debug_printf("\u2705  Public Keys Match The Excepted Result!\n");         \
+            return 0;                                                       \
+        } else {                                                            \
+            debug_printf("\u274C Keys Mismatch!\n");                        \
+            return 1;                                                       \
         }                                                                   \
         debug_printf("\n");                                                \
         add_benchmark_results(#var, (cycles[REPEAT_MEDIAN >> 1]));         \
@@ -316,8 +327,9 @@ int main(void)
     //bench_testnumber_fe25519_add();
     //bench_testnumber_fe25519_sub();
     //bench_testnumber_fe25519_mul();
+    bench_x25519_fe25519_add();
     bench_x25519_fe25519_sub();
-    bench_x25519_fe25519_mul_wrap();
+    bench_x25519_fe25519_mul();
     bench_x25519_fe25519_sqr();
     bench_x25519_curve25519_scalarmult();
     
