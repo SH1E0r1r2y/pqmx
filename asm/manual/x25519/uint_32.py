@@ -10,12 +10,12 @@ def hex_to_uint32_array(hex_str):
 
     return ", ".join(result)
 
-scalar = "a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4"
+scalar = "77076d0a7318a57d3c16c17251b26645df4c2f87ebc0992ab177fba51db92c2a"
 uint32_format = hex_to_uint32_array(scalar)
 print(f"uint32_t private[X25519_SIZE] = {{ {uint32_format} }};")
-u_cor = "e6db6867583030db3594c1a424b15f7c726624ec26b3353b10a903a6d0ab1c4c"
+u_cor = " 09 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0000"
 uint32_format = hex_to_uint32_array(u_cor)
 print(f"uint32_t public[X25519_SIZE] = {{ {uint32_format} }};")
-outputexcept = "c3da55379de9c6908e94ea4df28d084f32eccf03491c71f754b4075577a28552"
+outputexcept = "8520f0098930a754748b7ddcb43ef75a0dbf3a0d26381af4eba4a98eaa9b4e6a"
 uint32_format = hex_to_uint32_array(outputexcept)
 print(f"uint32_t public[X25519_SIZE] = {{ {uint32_format} }};")
